@@ -83,7 +83,7 @@ is_kk(){
 	echo "deploy kubernetes with kubekey!"
 	echo "check deploy log with following command"
 	echo `kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f`
-	wget https://ghproxy.com/https://github.com/kubesphere/kubekey/releases/download/v2.0.0-rc.4/kubekey-v2.0.0-rc.4-linux-amd64.tar.gz | tar zxf
+	wget -q https://ghproxy.com/https://github.com/kubesphere/kubekey/releases/download/v2.0.0-rc.4/kubekey-v2.0.0-rc.4-linux-amd64.tar.gz | tar -zxvf
 	export KKZONE=cn
 	./kk create cluster --with-kubernetes v1.20.4 --with-kubesphere v3.1.1
 }
@@ -92,14 +92,15 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		--kubeadmin)
 			is_kubeadmin
-			#shift
+			shift
 			;;
 		--kk)
 			is_kk
+			shift
 			;;
 		--*)
 			echo "Illegal option $1"
 			;;
 	esac
-	#shift $(( $# > 0 ? 1 : 0 ))
+	shift $(( $# > 0 ? 1 : 0 ))
 done
